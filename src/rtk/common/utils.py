@@ -1,6 +1,33 @@
 r"""
 Util functions
 """
+from datetime import datetime, timedelta
+
+
+def is_business_day(date_) ->bool:
+    """
+    Holidays: weekends, christmas and new year
+    :param date_:
+    :return: bool
+    """
+    is_holiday = date_.weekday() >= 5 or (date_.month == 1 and date_.day == 1) or \
+        (date_.month == 12 and date_.day == 25)
+
+    return not is_holiday
+
+
+def next_business_day(date_str) ->str:
+    """
+    get the next business date of date_str
+    :param date_str:
+    :return:
+    """
+    _date = datetime.strptime(date_str, '%Y/%m/%d')
+    one_more_day = timedelta(days=1)
+    next_date = _date + one_more_day
+    while not is_business_day(next_date):
+        next_date = next_date + one_more_day
+    return next_date.strftime('%Y/%m/%d')
 
 
 def traverse_complex_data(data, func):
